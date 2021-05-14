@@ -23,7 +23,7 @@ public class AliceUI implements ActionListener, Runnable {
     JButton SendButton;
     JTextField TextInputField;
 
-    static JFrame f1 = new JFrame();
+    static JFrame mainFrame = new JFrame();
     static JPanel Dialogue;
 
     static Box vertical = Box.createVerticalBox();
@@ -45,13 +45,13 @@ public class AliceUI implements ActionListener, Runnable {
     }
 
     private void initComponents() {
-        f1.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        mainFrame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         AliceInfo = new JPanel();
         AliceInfo.setLayout(null);
         AliceInfo.setBackground(new Color(0, 106, 255));
         AliceInfo.setBounds(0, 0, 450, 70);
-        f1.add(AliceInfo);
+        mainFrame.add(AliceInfo);
 
         ImageIcon AliceAvatar = new ImageIcon(getClass().getResource("/icons/Alice.png"));
         Image temp = AliceAvatar.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT);
@@ -83,9 +83,9 @@ public class AliceUI implements ActionListener, Runnable {
         Dialogue = new JPanel();
         Dialogue.setFont(new Font("Helvetica Neue", Font.PLAIN, 18));
 
-        JScrollPane sp = new JScrollPane(Dialogue);
-        sp.setBounds(5, 75, 440, 570);
-        sp.setBorder(BorderFactory.createEmptyBorder());
+        JScrollPane chatScrollPane = new JScrollPane(Dialogue);
+        chatScrollPane.setBounds(5, 75, 440, 570);
+        chatScrollPane.setBorder(BorderFactory.createEmptyBorder());
 
         ScrollBarUI ui = new BasicScrollBarUI() {
             protected JButton createDecreaseButton(int orientation) {
@@ -104,13 +104,13 @@ public class AliceUI implements ActionListener, Runnable {
             }
         };
 
-        sp.getVerticalScrollBar().setUI(ui);
-        f1.add(sp);
+        chatScrollPane.getVerticalScrollBar().setUI(ui);
+        mainFrame.add(chatScrollPane);
 
         TextInputField = new JTextField();
         TextInputField.setBounds(5, 648, 310, 40);
         TextInputField.setFont(new Font("Helvetica Neue", Font.PLAIN, 18)); // NOI18N
-        f1.add(TextInputField);
+        mainFrame.add(TextInputField);
 
         TextInputField.addKeyListener(new KeyAdapter(){
             public void keyPressed(KeyEvent ke){
@@ -136,14 +136,14 @@ public class AliceUI implements ActionListener, Runnable {
         SendButton.setFont(new Font("SAN_SERIF", Font.PLAIN, 16));
 
         SendButton.addActionListener(this);
-        f1.add(SendButton);
+        mainFrame.add(SendButton);
 
-        f1.setLayout(null);
-        f1.setTitle("Messenger");
-        f1.setSize(450, 715);
-        f1.setLocation(200, 80);
-        f1.setResizable(false);
-        f1.setVisible(true);
+        mainFrame.setLayout(null);
+        mainFrame.setTitle("Messenger");
+        mainFrame.setSize(450, 715);
+        mainFrame.setLocation(200, 80);
+        mainFrame.setResizable(false);
+        mainFrame.setVisible(true);
     }
 
     @Override
@@ -213,7 +213,7 @@ public class AliceUI implements ActionListener, Runnable {
                     vertical.add(left);
                     vertical.add(Box.createVerticalStrut(15));
                     Dialogue.add(vertical, BorderLayout.PAGE_START);
-                    f1.validate();
+                    mainFrame.validate();
                 }
             }
 
@@ -222,7 +222,7 @@ public class AliceUI implements ActionListener, Runnable {
 
     public static void main(String[] args) {
         AliceUI a = new AliceUI();
-        a.f1.setVisible(true);
+        a.mainFrame.setVisible(true);
         Thread thread = new Thread(a);
         thread.start();
     }
