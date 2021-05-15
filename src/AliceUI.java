@@ -17,23 +17,25 @@ import java.util.Calendar;
 
 public class AliceUI implements ActionListener, Runnable {
 
-    JPanel AliceInfo;
-    JLabel AliceName;
-    JLabel AliceStatus;
-    JButton SendButton;
-    JTextField TextInputField;
+    private JPanel AliceInfo;
+    private JLabel AliceName;
+    private JLabel AliceStatus;
+    private JScrollPane ChatScrollPane;
+    private ScrollBarUI ui;
+    private JButton SendButton;
+    private JTextField TextInputField;
 
-    static JFrame mainFrame = new JFrame();
-    static JPanel Dialogue;
+    private static JFrame mainFrame = new JFrame();
+    private static JPanel Dialogue;
 
-    static Box vertical = Box.createVerticalBox();
+    private static Box vertical = Box.createVerticalBox();
 
-    BufferedWriter writer;
-    BufferedReader reader;
+    private BufferedWriter writer;
+    private BufferedReader reader;
 
-    String myPreviousChat = "";
+    private String myPreviousChat = "";
 
-    Boolean typing;
+    private Boolean typing;
 
     public AliceUI() {
         initComponents();
@@ -83,11 +85,11 @@ public class AliceUI implements ActionListener, Runnable {
         Dialogue = new JPanel();
         Dialogue.setFont(new Font("Helvetica Neue", Font.PLAIN, 18));
 
-        JScrollPane chatScrollPane = new JScrollPane(Dialogue);
-        chatScrollPane.setBounds(5, 75, 440, 570);
-        chatScrollPane.setBorder(BorderFactory.createEmptyBorder());
+        ChatScrollPane = new JScrollPane(Dialogue);
+        ChatScrollPane.setBounds(5, 75, 440, 570);
+        ChatScrollPane.setBorder(BorderFactory.createEmptyBorder());
 
-        ScrollBarUI ui = new BasicScrollBarUI() {
+        ui = new BasicScrollBarUI() {
             protected JButton createDecreaseButton(int orientation) {
                 JButton button = super.createDecreaseButton(orientation);
                 button.setBackground(new Color(0, 106, 255));
@@ -104,8 +106,8 @@ public class AliceUI implements ActionListener, Runnable {
             }
         };
 
-        chatScrollPane.getVerticalScrollBar().setUI(ui);
-        mainFrame.add(chatScrollPane);
+        ChatScrollPane.getVerticalScrollBar().setUI(ui);
+        mainFrame.add(ChatScrollPane);
 
         TextInputField = new JTextField();
         TextInputField.setBounds(5, 648, 310, 40);
@@ -152,7 +154,6 @@ public class AliceUI implements ActionListener, Runnable {
             String out = TextInputField.getText();
 
             if (!out.equals("")) {
-
                 myPreviousChat = out;
 
                 JPanel p2 = formatLabel(out);
@@ -171,6 +172,8 @@ public class AliceUI implements ActionListener, Runnable {
                 writer.flush();
 
                 TextInputField.setText("");
+                ChatScrollPane.getViewport().setViewPosition(new Point(10000,10000));
+                mainFrame.validate();
             }
         } catch (Exception e) {}
     }
@@ -213,6 +216,7 @@ public class AliceUI implements ActionListener, Runnable {
                     vertical.add(left);
                     vertical.add(Box.createVerticalStrut(15));
                     Dialogue.add(vertical, BorderLayout.PAGE_START);
+                    ChatScrollPane.getViewport().setViewPosition(new Point(10000,10000));
                     mainFrame.validate();
                 }
             }

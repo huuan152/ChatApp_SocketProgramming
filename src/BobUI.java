@@ -17,21 +17,23 @@ import java.util.Calendar;
 
 public class BobUI implements ActionListener, Runnable {
 
-    JPanel BobInfo;
-    JLabel BobName;
-    JLabel BobStatus;
-    JButton SendButton;
-    JTextField TextInputField;
+    private JPanel BobInfo;
+    private JLabel BobName;
+    private JLabel BobStatus;
+    private JScrollPane ChatScrollPane;
+    private ScrollBarUI ui;
+    private JButton SendButton;
+    private JTextField TextInputField;
 
-    static JFrame mainFrame = new JFrame();
-    static JPanel Dialogue;
+    private static JFrame mainFrame = new JFrame();
+    private static JPanel Dialogue;
 
-    static Box vertical = Box.createVerticalBox();
+    private static Box vertical = Box.createVerticalBox();
 
-    BufferedWriter writer;
-    BufferedReader reader;
+    private BufferedWriter writer;
+    private BufferedReader reader;
 
-    String myPreviousChat = "";
+    private String myPreviousChat = "";
 
     Boolean typing;
 
@@ -83,11 +85,11 @@ public class BobUI implements ActionListener, Runnable {
         Dialogue = new JPanel();
         Dialogue.setFont(new Font("Helvetica Neue", Font.PLAIN, 18));
 
-        JScrollPane chatScrollPane = new JScrollPane(Dialogue);
-        chatScrollPane.setBounds(5, 75, 440, 570);
-        chatScrollPane.setBorder(BorderFactory.createEmptyBorder());
+        ChatScrollPane = new JScrollPane(Dialogue);
+        ChatScrollPane.setBounds(5, 75, 440, 570);
+        ChatScrollPane.setBorder(BorderFactory.createEmptyBorder());
 
-        ScrollBarUI ui = new BasicScrollBarUI() {
+        ui = new BasicScrollBarUI() {
             protected JButton createDecreaseButton(int orientation) {
                 JButton button = super.createDecreaseButton(orientation);
                 button.setBackground(new Color(0, 106, 255));
@@ -104,8 +106,8 @@ public class BobUI implements ActionListener, Runnable {
             }
         };
 
-        chatScrollPane.getVerticalScrollBar().setUI(ui);
-        mainFrame.add(chatScrollPane);
+        ChatScrollPane.getVerticalScrollBar().setUI(ui);
+        mainFrame.add(ChatScrollPane);
 
         TextInputField = new JTextField();
         TextInputField.setBounds(5, 648, 310, 40);
@@ -171,6 +173,8 @@ public class BobUI implements ActionListener, Runnable {
                 writer.flush();
 
                 TextInputField.setText("");
+                ChatScrollPane.getViewport().setViewPosition(new Point(10000,10000));
+                mainFrame.validate();
             }
         } catch (Exception e) {}
     }
@@ -213,6 +217,8 @@ public class BobUI implements ActionListener, Runnable {
                     vertical.add(left);
                     vertical.add(Box.createVerticalStrut(15));
                     Dialogue.add(vertical, BorderLayout.PAGE_START);
+
+                    ChatScrollPane.getViewport().setViewPosition(new Point(10000,10000));
                     mainFrame.validate();
                 }
             }

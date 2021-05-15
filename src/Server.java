@@ -3,18 +3,15 @@ import java.io.*;
 import java.util.*;
 
 @SuppressWarnings("unchecked")
-public class Server implements Runnable{
+public class Server implements Runnable {
 
     Socket socket;
 
-    public static Vector client = new Vector();
+    public static ArrayList<BufferedWriter> client = new ArrayList<>();
 
     public Server(Socket socket){
-        try{
-            this.socket = socket;
-        } catch(Exception e){ }
+        this.socket = socket;
     }
-
 
     public void run(){
         try{
@@ -25,22 +22,19 @@ public class Server implements Runnable{
 
             while(true){
                 String data = reader.readLine().trim();
-                System.out.println("Received "+data);
+                System.out.println("Received " + data);
 
                 for(int i = 0; i < client.size(); i++){
                     try{
-                        BufferedWriter bw = (BufferedWriter)client.get(i);
-                        bw.write(data);
-                        bw.write("\r\n");
-                        bw.flush();
-                    }catch(Exception e){ }
+                        client.get(i).write(data);
+                        client.get(i).write("\r\n");
+                        client.get(i).flush();
+                    } catch(Exception e){ }
                 }
-
             }
         } catch(Exception e){ }
 
     }
-
 
     public static void main(String[] args) throws Exception{
         ServerSocket s = new ServerSocket(2001);
